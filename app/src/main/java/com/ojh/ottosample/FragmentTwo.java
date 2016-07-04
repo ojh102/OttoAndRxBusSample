@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.squareup.otto.Subscribe;
-
 /**
  * Created by 01071724654 on 2016-07-04.
  */
@@ -31,22 +29,29 @@ public class FragmentTwo extends Fragment {
 
     private void init(View v) {
         tvText = (TextView)v.findViewById(R.id.tvText);
+
+        RxBus.toObserverable()
+                .subscribe(event -> {
+                    if (event instanceof OttoEvent) {
+                        tvText.setText("" + ((OttoEvent) event).num);
+                    }
+                });
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
+//        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDestroy() {
-        BusProvider.getInstance().unregister(this);
+//        BusProvider.getInstance().unregister(this);
         super.onDestroy();
     }
 
-    @Subscribe
-    public void onEventOtto(OttoEvent ottoEvent) {
-        tvText.setText(""+ottoEvent.num);
-    }
+//    @Subscribe
+//    public void onEventOtto(OttoEvent ottoEvent) {
+//        tvText.setText(""+ottoEvent.num);
+//    }
 }
